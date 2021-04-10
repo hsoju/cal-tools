@@ -1,5 +1,13 @@
 import struct
-from typing import Callable, Collection, List, Union
+from typing import Any, Callable, Collection, Generator, List, Union
+
+
+def fix_case(tag: str, uppercase: bool) -> str:
+    return tag.upper() if uppercase else tag.lower()
+
+
+def get_cases(uppercase: bool, *tags: str) -> Generator[str, Any, None]:
+    return (fix_case(tag, uppercase) for tag in tags)
 
 
 def unpack_chunk(chunk: bytes, fmt: str) -> List[Union[float, int]]:

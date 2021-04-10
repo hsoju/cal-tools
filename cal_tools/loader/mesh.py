@@ -5,7 +5,7 @@ from mmap import ACCESS_READ, mmap
 from xml.etree import ElementTree as et
 from cal_tools.constants import CAL_OBJECT
 from cal_tools.loader.base import CalLoader
-from cal_tools.loader.utils import unpack_chunk, unpack_values
+from cal_tools.loader.utils import fix_case, get_cases, unpack_chunk, unpack_values
 from cal_tools.struct.b_vertex import CalBlendVertex
 from cal_tools.struct.face import CalFace
 from cal_tools.struct.mesh import CalMesh
@@ -82,13 +82,6 @@ class CalMeshLoader(CalLoader):
                 submeshes.append(self.parse_binary_submesh(cmf))
         return CalMesh(submeshes)
 
-    @staticmethod
-    def fix_case(tag: str, uppercase: bool) -> str:
-        return tag.upper() if uppercase else tag.lower()
-
-    def get_cases(self, uppercase: bool, *tags):
-        return (self.fix_case(tag, uppercase) for tag in tags)
-
     def parse_ascii_face(self, face: et.Element, v_id: str) -> CalFace:
         vertex_ids = unpack_values(face.attrib[v_id], int)
         return CalFace(vertex_ids)
@@ -116,27 +109,27 @@ class CalMeshLoader(CalLoader):
         return CalVertex(position, normal, uv, color, influences)
 
     def parse_ascii_morph(self, morph: et.Element, uppercase: bool, v_id: str, tex: str) -> CalMorph:
-        name = morph.attrib[self.fix_case('name', uppercase)]
-        position, normal = self.get_cases(uppercase, 'position', 'normal')
+        name = morph.attrib[fix_case('name', uppercase)]
+        position, normal = get_cases(uppercase, 'position', 'normal')
         blend_vertices = []
-        for blend_vertex in morph.iter(self.fix_case('blendvertex', uppercase)):
+        for blend_vertex in morph.iter(fix_case('blendvertex', uppercase)):
             blend_vertex_object = self.parse_ascii_blend_vertex(blend_vertex, v_id, position, normal, tex)
             if blend_vertex_object:
                 blend_vertices.append(blend_vertex_object)
         return CalMorph(name, blend_vertices)
 
     def parse_ascii_submesh(self, submesh: et.Element, uppercase: bool) -> CalSubmesh:
-        material = int(submesh.attrib[self.fix_case('material', uppercase)])
-        pos, norm, col, tex, infl, id_, v_id = self.get_cases(uppercase, 'pos', 'norm', 'color',
-                                                              'texcoord', 'influence', 'id', 'vertexid')
+        material = int(submesh.attrib[fix_case('material', uppercase)])
+        pos, norm, col, tex, infl, id_, v_id = get_cases(uppercase, 'pos', 'norm', 'color',
+                                                         'texcoord', 'influence', 'id', 'vertexid')
         vertices = []
-        for vertex in submesh.iter(self.fix_case('vertex', uppercase)):
+        for vertex in submesh.iter(fix_case('vertex', uppercase)):
             vertices.append(self.parse_ascii_vertex(vertex, pos, norm, tex, col, infl, id_))
         morphs = []
-        for morph in submesh.iter(self.fix_case('morph', uppercase)):
+        for morph in submesh.iter(fix_case('morph', uppercase)):
             morphs.append(self.parse_ascii_morph(morph, uppercase, v_id, tex))
         faces = []
-        for face in submesh.iter(self.fix_case('face', uppercase)):
+        for face in submesh.iter(fix_case('face', uppercase)):
             faces.append(self.parse_ascii_face(face, v_id))
         return CalSubmesh(material, vertices, faces)
 
@@ -148,10 +141,9 @@ class CalMeshLoader(CalLoader):
             start = match.start()
             root = et.fromstring(data[start:])
             submeshes = []
-            for submesh in root.iter(self.fix_case('submesh', uppercase)):
+            for submesh in root.iter(fix_case('submesh', uppercase)):
                 submeshes.append(self.parse_ascii_submesh(submesh, uppercase))
         return CalMesh(submeshes)
-
 
 # fpath = "C:/Users/JM729/Desktop/Lynx/Gaming/Virtual/iMVu/Testing/Heads/F-Decrypted.xmf"
 # cc = CalMeshLoader(fpath)
