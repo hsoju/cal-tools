@@ -82,10 +82,3 @@ class CalMeshLoader(CalLoader):
 
     def load_ascii(self) -> CAL_OBJECT:
         pass
-
-
-shirtpath = "C:/Users/JM729/Desktop/Lynx/Gaming/Virtual/iMVu/Testing/Clothing/Shirt-Encrypted.xmf"
-fpath = "C:/Users/JM729/Desktop/Lynx/Gaming/Virtual/iMVu/Testing/Accessories/Wings/Wings-Encrypted.xmf"
-headpath = "C:/Users/JM729/Desktop/Lynx/Gaming/Virtual/iMVu/Testing/Heads/F-Encrypted.xmf"
-cc = CalMeshLoader(headpath)
-cc.load()
