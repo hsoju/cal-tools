@@ -90,5 +90,3 @@ class XmfExporter(CalExporter):
                 with open(filepath, "w") as f:
                     f.write('<header magic="XMF" version="919"/>\n')
                     f.write(readable_xml)
-
-
