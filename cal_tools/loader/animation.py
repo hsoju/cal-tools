@@ -15,6 +15,7 @@ class CalAnimationLoader(CalLoader):
     def load_binary_keyframe(self, caf: mmap) -> CalKeyframe:
         time = struct.unpack('f', caf.read(4))[0]
         translation = unpack_chunk(caf.read(12), 'f')
+        translation = None if sum(translation) > 1000000000 else translation
         rotation = unpack_chunk(caf.read(16), 'f')
         return CalKeyframe(time, rotation, translation)
 
