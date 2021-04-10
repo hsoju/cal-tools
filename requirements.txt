@@ -1,0 +1,10 @@
+blinker==1.4
+certifi==2020.12.5
+h11==0.7.0
+kaitaistruct==0.8
+pyOpenSSL==18.0.0
+ruamel.yaml==0.15.100
+tornado==5.1.1
+urwid==2.0.1
+wincertstore==0.2
+wsproto==0.11.0
