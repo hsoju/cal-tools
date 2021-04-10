@@ -1,7 +1,7 @@
-from typing import Iterable
+from typing import Collection
 from cal_tools.struct.submesh import CalSubmesh
 
 
 class CalMesh:
-    def __init__(self, submeshes: Iterable[CalSubmesh]):
+    def __init__(self, submeshes: Collection[CalSubmesh]):
         self.submeshes = submeshes
