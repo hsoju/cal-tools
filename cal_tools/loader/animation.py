@@ -25,8 +25,8 @@ class CalAnimationLoader(CalLoader):
         keyframes = [self.load_binary_keyframe(caf) for _ in range(keyframe_count)]
         return CalTrack(bone_id, keyframes)
 
-    def load_binary(self) -> CAL_OBJECT:
-        with open(self.filepath, 'rb') as f, mmap(f.fileno(), 0, access=ACCESS_READ) as caf:
+    def load_binary(self, filepath: str) -> CAL_OBJECT:
+        with open(filepath, 'rb') as f, mmap(f.fileno(), 0, access=ACCESS_READ) as caf:
             caf.seek(12, os.SEEK_CUR)
             duration = struct.unpack('f', caf.read(4))[0]
             track_count = struct.unpack('i', caf.read(4))[0]
@@ -47,8 +47,8 @@ class CalAnimationLoader(CalLoader):
         keyframes = [self.load_ascii_keyframe(keyframe) for keyframe in track.iter('keyframe')]
         return CalTrack(bone_id, keyframes)
 
-    def load_ascii(self) -> CAL_OBJECT:
-        with open(self.filepath, 'r') as f:
+    def load_ascii(self, filepath: str) -> CAL_OBJECT:
+        with open(filepath, 'r') as f:
             data = f.read()
             match = re.search(r"<animation", data, re.IGNORECASE)
             data = data.lower()

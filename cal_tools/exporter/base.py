@@ -3,7 +3,8 @@ from cal_tools.constants import CAL_OBJECT
 
 
 class CalExporter:
-    def __init__(self):
+    def __init__(self, extension: str):
+        self.extension = extension
         pass
 
     @abc.abstractmethod

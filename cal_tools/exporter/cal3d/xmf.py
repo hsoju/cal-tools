@@ -12,6 +12,9 @@ from cal_tools.exporter.utils import sjoin
 
 
 class XmfExporter(CalExporter):
+    def __init__(self):
+        super().__init__('.xmf')
+
     def parse_vertex(self, submesh_tag: et.Element, vertex: CalVertex, id_: int) -> et.Element:
         vertex_tag = et.SubElement(submesh_tag, 'vertex')
         vertex_tag.attrib['id'] = str(id_)

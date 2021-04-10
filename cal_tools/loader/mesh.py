@@ -73,8 +73,8 @@ class CalMeshLoader(CalLoader):
             faces.append(self.parse_binary_face(cmf))
         return CalSubmesh(material, vertices, faces, morphs)
 
-    def load_binary(self) -> CAL_OBJECT:
-        with open(self.filepath, 'rb') as f, mmap(f.fileno(), 0, access=ACCESS_READ) as cmf:
+    def load_binary(self, filepath: str) -> CAL_OBJECT:
+        with open(filepath, 'rb') as f, mmap(f.fileno(), 0, access=ACCESS_READ) as cmf:
             cmf.seek(8, os.SEEK_CUR)
             submesh_count = struct.unpack('i', cmf.read(4))[0]
             submeshes = []
@@ -133,8 +133,8 @@ class CalMeshLoader(CalLoader):
             faces.append(self.parse_ascii_face(face, v_id))
         return CalSubmesh(material, vertices, faces)
 
-    def load_ascii(self) -> CAL_OBJECT:
-        with open(self.filepath, 'r') as f:
+    def load_ascii(self, filepath: str) -> CAL_OBJECT:
+        with open(filepath, 'r') as f:
             data = f.read()
             match = re.search(r"<mesh", data, re.IGNORECASE)
             uppercase = match.group().isupper()

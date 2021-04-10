@@ -9,6 +9,9 @@ from cal_tools.struct.track import CalTrack
 
 
 class XafExporter(CalExporter):
+    def __init__(self):
+        super().__init__('.xaf')
+
     def parse_keyframe(self, track_tag: et.Element, keyframe: CalKeyframe) -> et.Element:
         keyframe_tag = et.SubElement(track_tag, 'keyframe')
         keyframe_tag.attrib['time'] = str(keyframe.time)
